@@ -17,6 +17,7 @@
         <activity android:name=".DemoActivity3" />
         <activity android:name=".DemoActivity4" />
         <activity android:name=".DemoActivity5" />
+        <activity android:name=".DemoActivity6" />
     </application>
 
 </manifest>

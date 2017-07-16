@@ -7,11 +7,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import org.reactivestreams.Subscriber;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.Observer;
-import rx.Subscriber;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Snow.ZhK on 2017/7/9.
@@ -37,59 +42,44 @@ public class DemoActivity1 extends AppCompatActivity {
         //创建一个观察者对象
         Observer<String> observer = new Observer<String>() {
             @Override
-            public void onCompleted() {
-                mTvContent.append("observer onCompleted");
-                mTvContent.append("\n");
+            public void onSubscribe(@NonNull Disposable d) {
+
             }
 
             @Override
-            public void onError(Throwable e) {
-                mTvContent.append("observer onError");
-                mTvContent.append("\n");
+            public void onNext(@NonNull String s) {
+
+                printMsgToTextView("observer onNext：" + s);
             }
 
             @Override
-            public void onNext(String s) {
-                mTvContent.append("observer onNext：" + s);
-                mTvContent.append("\n");
-            }
-        };
-        //Subscriber是Observer的实现类
-        Subscriber<String> subscriber = new Subscriber<String>() {
-            @Override
-            public void onCompleted() {
-                mTvContent.append("subscriber onCompleted");
-                mTvContent.append("\n");
+            public void onError(@NonNull Throwable e) {
+                printMsgToTextView("observer onError");
             }
 
             @Override
-            public void onError(Throwable e) {
-                Log.d(TAG, "subscriber onError");
-                mTvContent.append("subscriber onError");
-                mTvContent.append("\n");
-            }
-
-            @Override
-            public void onNext(String s) {
-                mTvContent.append("subscriber onNext " + s);
-                mTvContent.append("\n");
+            public void onComplete() {
+                printMsgToTextView("observer onCompleted");
             }
         };
         /* 创建一个被观察者 */
         // OnSubscribe作用相当于一个计划表，当observable被订阅时OnSubscribe对象的call方法会被自动调用。
-        Observable observable = Observable.create(new Observable.OnSubscribe<String>(){
-
+        Observable observable = Observable.create(new ObservableOnSubscribe() {
             @Override
-            public void call(Subscriber<? super String> subscriber) {
-                subscriber.onNext("Hello");
-                subscriber.onNext("Hi");
-                subscriber.onNext("Aloha");
-                subscriber.onCompleted();
+            public void subscribe(@NonNull ObservableEmitter e) throws Exception {
+                e.onNext("Hello");
+                e.onNext("Hi");
+                e.onNext("Aloha");
+                e.onComplete();
             }
         });
         //订单观察者
         observable.subscribe(observer);
-        observable.subscribe(subscriber);
+    }
+
+    private void printMsgToTextView(String msg) {
+        mTvContent.append(msg);
+        mTvContent.append("\n");
     }
 
 }

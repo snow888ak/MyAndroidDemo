@@ -3,16 +3,15 @@ package com.example.rxjavademo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.Observer;
-import rx.functions.Action0;
-import rx.functions.Action1;
+import io.reactivex.Observable;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by Snow.ZhK on 2017/7/9.
@@ -34,33 +33,33 @@ public class DemoActivity3 extends AppCompatActivity {
     }
 
     public void startClick(View v){
-        Action1<String> onNextAction = new Action1<String>() {
+        Consumer<String> onNextAction = new Consumer<String>() {
             @Override
-            public void call(String s) {
+            public void accept(@NonNull String s) throws Exception {
                 mTvContent.append("onNextAction " + s);
                 mTvContent.append("\n");
             }
         };
-        Action1<Throwable> onErrorAction = new Action1<Throwable>() {
+        Consumer<Throwable> onErrorAction = new Consumer<Throwable>() {
             @Override
-            public void call(Throwable e) {
+            public void accept(@NonNull Throwable e) throws Exception {
                 mTvContent.append("onErrorAction " + e.getMessage());
             }
         };
-        Action0 onCompleteAction = new Action0() {
+        Action onCompleteAction = new Action() {
             @Override
-            public void call() {
+            public void run() throws Exception {
                 mTvContent.append("onCompleteAction ");
                 mTvContent.append("\n");
             }
         };
         String[] fromArrays = {"from_1", "from_2", "from_3"};
         //自动创建Subscriber,并使用onNextAction来定义onNext();
-        Observable.from(fromArrays).subscribe(onNextAction);
+        Observable.fromArray(fromArrays).subscribe(onNextAction);
         //自动创建Subscriber,并使用onNextAction和onErrorAction来定义onNext()和onError();
-        Observable.from(fromArrays).subscribe(onNextAction, onErrorAction);
+        Observable.fromArray(fromArrays).subscribe(onNextAction, onErrorAction);
         //自动创建Subscriber,并使用onNextAction、onErrorAction和onCompleteAction来定义onNext()、onError()和onComplete();
-        Observable.from(fromArrays).subscribe(onNextAction, onErrorAction, onCompleteAction);
+        Observable.fromArray(fromArrays).subscribe(onNextAction, onErrorAction, onCompleteAction);
     }
 
 }

@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick({R.id.button, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6,
-        R.id.button7})
+        R.id.button7, R.id.button8})
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.button7:
                 intent.setClass(getApplicationContext(), DemoActivity7.class);
+                break;
+            case R.id.button8:
+                intent.setClass(getApplicationContext(), DemoActivity8.class);
                 break;
         }
         startActivity(intent);

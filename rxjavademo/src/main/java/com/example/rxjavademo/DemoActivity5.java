@@ -15,9 +15,11 @@ import com.example.rxjavademo.model.StudentModelImpl;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.functions.Action1;
-import rx.functions.Func1;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 /**
  * Created by Snow.ZhK on 2017/7/9.
@@ -45,71 +47,71 @@ public class DemoActivity5 extends AppCompatActivity {
     public void startClick(View v) {
         printMsgToTextView("------打印学生信息------");
         Student[] students = studentModel.getStudents();
-        Observable.from(students).subscribe(new Action1<Student>() {
+        Observable.fromArray(students).subscribe(new Consumer<Student>() {
             @Override
-            public void call(Student student) {
+            public void accept(@NonNull Student student) throws Exception {
                 printMsgToTextView(JsonUtil.toJson(student));
             }
         });
         printMsgToTextView("------打印课程信息------");
         Course[] courses = studentModel.getCourses();
-        Observable.from(courses).subscribe(new Action1<Course>() {
+        Observable.fromArray(courses).subscribe(new Consumer<Course>() {
             @Override
-            public void call(Course course) {
+            public void accept(@NonNull Course course) throws Exception {
                 printMsgToTextView(JsonUtil.toJson(course));
             }
         });
         printMsgToTextView("------打印学生的名字信息------");
-        Observable.from(students)
-                .map(new Func1<Student, String>() {
+        Observable.fromArray(students)
+                .map(new Function<Student, String>() {
                     @Override
-                    public String call(Student student) {
+                    public String apply(@NonNull Student student) throws Exception {
                         return student.getName();
                     }
                 })
-                .subscribe(new Action1<String>() {
+                .subscribe(new Consumer<String>() {
                     @Override
-                    public void call(String s) {
+                    public void accept(@NonNull String s) throws Exception {
                         printMsgToTextView(s);
                     }
                 });
         printMsgToTextView("------打印学生的课程信息------");
-        Observable.from(students)
-                .flatMap(new Func1<Student, Observable<Course>>() {
+        Observable.fromArray(students)
+                .flatMap(new Function<Student, ObservableSource<Course>>() {
                     @Override
-                    public Observable<Course> call(Student student) {
-                        return Observable.from(studentModel.getCourseByStudent(student));
+                    public ObservableSource<Course> apply(@NonNull Student student) throws Exception {
+                        return Observable.fromArray(studentModel.getCourseByStudent(student));
                     }
                 })
-                .map(new Func1<Course, String>() {
+                .map(new Function<Course, String>() {
                     @Override
-                    public String call(Course course) {
+                    public String apply(@NonNull Course course) throws Exception {
                         return course.getCourseName();
                     }
                 })
-                .subscribe(new Action1<String>() {
+                .subscribe(new Consumer<String>() {
                     @Override
-                    public void call(String s) {
+                    public void accept(@NonNull String s) throws Exception {
                         printMsgToTextView(s);
                     }
                 });
         printMsgToTextView("------打印课程的学生信息------");
-        Observable.from(courses)
-                .flatMap(new Func1<Course, Observable<Student>>() {
+        Observable.fromArray(courses)
+                .flatMap(new Function<Course, ObservableSource<Student>>() {
                     @Override
-                    public Observable<Student> call(Course course) {
-                        return Observable.from(studentModel.getStudentsByCourse(course));
+                    public ObservableSource<Student> apply(@NonNull Course course) throws Exception {
+                        return Observable.fromArray(studentModel.getStudentsByCourse(course));
                     }
                 })
-                .map(new Func1<Student, String>() {
+                .map(new Function<Student, String>() {
                     @Override
-                    public String call(Student student) {
+                    public String apply(@NonNull Student student) throws Exception {
                         return student.getName();
                     }
                 })
-                .subscribe(new Action1<String>() {
+                .subscribe(new Consumer<String>() {
                     @Override
-                    public void call(String s) {
+                    public void accept(@NonNull String s) throws Exception {
                         printMsgToTextView(s);
                     }
                 });

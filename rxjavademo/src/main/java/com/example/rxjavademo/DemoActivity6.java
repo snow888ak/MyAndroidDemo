@@ -7,17 +7,15 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.lib.utils.JsonUtil;
-import com.example.rxjavademo.entity.Course;
-import com.example.rxjavademo.entity.Student;
 import com.example.rxjavademo.model.IStudentModel;
 import com.example.rxjavademo.model.StudentModelImpl;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.functions.Action1;
-import rx.functions.Func1;
+import io.reactivex.Observable;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 /**
  * Created by Snow.ZhK on 2017/7/9.
@@ -43,15 +41,15 @@ public class DemoActivity6 extends AppCompatActivity {
     }
 
     public void startClick(View v) {
-        Func1<Integer, String> operator1 = new Func1<Integer, String>() {
+        Function<Integer, String> operator1 = new Function<Integer, String>() {
             @Override
-            public String call(Integer integer) {
+            public String apply(@NonNull Integer integer) throws Exception {
                 return String.valueOf(integer);
             }
         };
-        Func1<String, Double> operator2 = new Func1<String, Double>() {
+        Function<String, Double> operator2 = new Function<String, Double>() {
             @Override
-            public Double call(String s) {
+            public Double apply(@NonNull String s) throws Exception {
                 Double result = new Double(-1);
                 try{
                     result = Double.valueOf(s);
@@ -61,9 +59,9 @@ public class DemoActivity6 extends AppCompatActivity {
                 return result;
             }
         };
-        Func1<Double, String> operator3 = new Func1<Double, String>() {
+        Function<Double, String> operator3 = new Function<Double, String>() {
             @Override
-            public String call(Double aDouble) {
+            public String apply(@NonNull Double aDouble) throws Exception {
                 return String.valueOf(aDouble);
             }
         };
@@ -71,9 +69,9 @@ public class DemoActivity6 extends AppCompatActivity {
                 .map(operator1)
                 .map(operator2)
                 .map(operator3)
-                .subscribe(new Action1<String>() {
+                .subscribe(new Consumer<String>() {
                     @Override
-                    public void call(String s) {
+                    public void accept(@NonNull String s) throws Exception {
                         printMsgToTextView(s);
                     }
                 });

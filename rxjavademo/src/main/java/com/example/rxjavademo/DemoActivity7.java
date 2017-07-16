@@ -1,12 +1,10 @@
 package com.example.rxjavademo;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,18 +17,17 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func0;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Snow.ZhK on 2017/7/9.
@@ -58,9 +55,9 @@ public class DemoActivity7 extends AppCompatActivity {
     public void startClick(View v) {
         Observable.just("http://www.open-open.com/")
                 .subscribeOn(Schedulers.io())
-                .map(new Func1<String, Document>() {
+                .map(new Function<String, Document>() {
                     @Override
-                    public Document call(String s) {
+                    public Document apply(@NonNull String s) throws Exception {
                         try {
                             return Jsoup.connect(s).get();
                         } catch (IOException e) {
@@ -69,41 +66,40 @@ public class DemoActivity7 extends AppCompatActivity {
                         return null;
                     }
                 })
-                .filter(new Func1<Document, Boolean>() {
+                .filter(new Predicate<Document>() {
                     @Override
-                    public Boolean call(Document document) {
+                    public boolean test(@NonNull Document document) throws Exception {
                         return document != null;
                     }
                 })
-                .flatMap(new Func1<Document, Observable<Element>>() {
+                .flatMap(new Function<Document, ObservableSource<Element>>() {
                     @Override
-                    public Observable<Element> call(Document document) {
-                        Elements elements = document.getElementsByTag("a");
-                        return Observable.from(elements.toArray(new Element[elements.size()]));
+                    public ObservableSource<Element> apply(@NonNull Document document) throws Exception {
+                        return Observable.fromIterable(document.getElementsByTag("a"));
                     }
                 })
-                .filter(new Func1<Element, Boolean>() {
+                .filter(new Predicate<Element>() {
                     @Override
-                    public Boolean call(Element element) {
+                    public boolean test(@NonNull Element element) throws Exception {
                         return element != null;
                     }
                 })
-                .map(new Func1<Element, String>() {
+                .map(new Function<Element, String>() {
                     @Override
-                    public String call(Element element) {
+                    public String apply(@NonNull Element element) throws Exception {
                         return element.attr("href");
                     }
                 })
-                .filter(new Func1<String, Boolean>() {
+                .filter(new Predicate<String>() {
                     @Override
-                    public Boolean call(String s) {
+                    public boolean test(@NonNull String s) throws Exception {
                         return s.startsWith("http:") && s.endsWith(".html");
                     }
                 })
                 .distinct()//去重
-                .map(new Func1<String, String>() {
+                .map(new Function<String, String>() {
                     @Override
-                    public String call(String s) {
+                    public String apply(@NonNull String s) throws Exception {
                         try {
                             String title = Jsoup.connect(s).get().title();
                             return s + "\n" + title;
@@ -113,16 +109,16 @@ public class DemoActivity7 extends AppCompatActivity {
                         return null;
                     }
                 })
-                .filter(new Func1<String, Boolean>() {
+                .filter(new Predicate<String>() {
                     @Override
-                    public Boolean call(String s) {
+                    public boolean test(@NonNull String s) throws Exception {
                         return !TextUtils.isEmpty(s);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<String>() {
+                .subscribe(new Consumer<String>() {
                     @Override
-                    public void call(String s) {
+                    public void accept(@NonNull String s) throws Exception {
                         printMsgToTextView(s);
                     }
                 });

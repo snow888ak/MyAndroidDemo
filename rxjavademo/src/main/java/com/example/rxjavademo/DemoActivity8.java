@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.reactivestreams.Subscriber;
-
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -18,9 +16,10 @@ import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Snow.ZhK on 2017/7/9.
@@ -28,60 +27,80 @@ import io.reactivex.functions.Function;
 
 public class DemoActivity8 extends AppCompatActivity {
 
-	public static final String TAG = DemoActivity8.class.getSimpleName();
+    public static final String TAG = DemoActivity8.class.getSimpleName();
 
-	@BindView(R.id.content)
-	TextView mTvContent;
+    @BindView(R.id.content1)
+    TextView mTvContent1;
+    @BindView(R.id.content2)
+    TextView mTvContent2;
 
-	@BindView(R.id.btn_start)
-	Button mBtnStart;
+    @BindView(R.id.btn_start1)
+    Button mBtnStart1;
+    @BindView(R.id.btn_start2)
+    Button mBtnStart2;
 
-	@Override
-	protected void onCreate(@Nullable Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_demo);
-		ButterKnife.bind(this);
-		mTvContent.setMovementMethod(ScrollingMovementMethod.getInstance());
-		setTitle("监听按钮点击次数");
-		Observable<Boolean> clickStream = Observable.create(new SomeOnSubscribe(mBtnStart));
-		clickStream.buffer(1, TimeUnit.SECONDS)
-				.map(new Function<List<Boolean>, Integer>() {
-					@Override
-					public Integer apply(@NonNull List<Boolean> booleen) throws Exception {
-						return booleen.size();
-					}
-				})
-				.subscribe(new Consumer<Integer>() {
-					@Override
-					public void accept(@NonNull Integer integer) throws Exception {
-						printMsgToTextView(String.valueOf(integer));
-					}
-				});
-	}
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_demo8);
+        ButterKnife.bind(this);
+        mTvContent1.setMovementMethod(ScrollingMovementMethod.getInstance());
+        mTvContent2.setMovementMethod(ScrollingMovementMethod.getInstance());
+        setTitle("监听按钮点击次数");
 
-	private void printMsgToTextView(String msg) {
-		mTvContent.append(msg);
-		mTvContent.append("\n");
-	}
+        mBtnStart1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Observable.create(
+                        new ObservableOnSubscribe<Integer>() {
+                            @Override
+                            public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
+                                e.onNext(1);
+                            }
+                        })
+                        .subscribe(new Consumer<Integer>() {
+                            @Override
+                            public void accept(@NonNull Integer integer) throws Exception {
+                                printMsgToTextView1(String.valueOf(integer));
+                            }
+                        });
+            }
+        });
 
-	class SomeOnSubscribe implements ObservableOnSubscribe<Boolean> {
+        ObservableOnSubscribe<Integer> subscribe = new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(@NonNull final ObservableEmitter<Integer> e) throws Exception {
+                mBtnStart2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        e.onNext(1);
+                    }
+                });
+            }
+        };
+        Observable.create(subscribe)
+                .subscribeOn(Schedulers.computation())
+                .debounce(1, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(@NonNull Integer integer) throws Exception {
+                        printMsgToTextView2("多次点击");
+                    }
+                });
+    }
 
-		private View mView;
 
-		public SomeOnSubscribe(View mView) {
-			this.mView = mView;
-		}
 
-		@Override
-		public void subscribe(@NonNull final ObservableEmitter<Boolean> e) throws Exception {
-//			mView.setOnClickListener(new View.OnClickListener() {
-//				@Override
-//				public void onClick(View view) {
-//					e.onNext(true);
-//				}
-//			});
-			e.onNext(true);
-		}
-	}
+    private void printMsgToTextView1(String msg) {
+        mTvContent1.append(msg);
+        mTvContent1.append("\n");
+    }
+
+    private void printMsgToTextView2(String msg) {
+        mTvContent2.append(msg);
+        mTvContent2.append("\n");
+    }
+
 
 }

@@ -8,6 +8,7 @@
 	android:orientation="vertical">
 
 	<TextView
+		android:id="@+id/content"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1"/>
@@ -16,7 +17,13 @@
 		android:id="@+id/btn_start"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="开始"/>
+		android:text="Retrofit回调"/>
+
+	<Button
+		android:id="@+id/btn_start2"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Retrofit+RxJava"/>
 
 
 </LinearLayout>

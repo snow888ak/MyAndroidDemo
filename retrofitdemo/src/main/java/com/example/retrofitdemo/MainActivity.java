@@ -1,5 +1,6 @@
 package com.example.retrofitdemo;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,11 +10,13 @@ import android.widget.TextView;
 import com.example.retrofitdemo.entity.Repo;
 import com.example.retrofitdemo.model.GitHubService;
 import com.example.retrofitdemo.model.GitHubService2;
+import com.example.retrofitdemo.sample1.SampleMainActivity;
 import com.google.gson.Gson;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
@@ -117,6 +120,11 @@ public class MainActivity extends AppCompatActivity {
 
 	private void clearMsg(){
 		mTvContent.setText("");
+	}
+
+	@OnClick(R.id.btn_start3)
+	public void toSampleActivity(View v){
+		startActivity(new Intent(this, SampleMainActivity.class));
 	}
 
 }

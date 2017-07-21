@@ -1,1 +1,1 @@
-include ':app', ':rxjavademo', ':lib', ':retrofitdemo'
+include ':app', ':rxjavademo', ':lib', ':retrofitdemo', ':recyclerviewlib'

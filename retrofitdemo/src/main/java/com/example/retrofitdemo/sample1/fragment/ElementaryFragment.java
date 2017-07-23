@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 
 import com.example.retrofitdemo.R;
-import com.example.retrofitdemo.network.NetWork;
+import com.example.retrofitdemo.sample1.network.NetWork;
 import com.example.retrofitdemo.sample1.adapter.ZhuangBiListAdapter;
 import com.example.retrofitdemo.sample1.model.ZhuangbiImage;
 

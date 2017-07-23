@@ -5,13 +5,17 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.example.retrofitdemo.R;
 import com.example.retrofitdemo.sample1.fragment.ElementaryFragment;
+import com.example.retrofitdemo.sample1.fragment.MapFragment;
 import com.example.retrofitdemo.sample1.fragment.TestPageFragment;
+import com.example.retrofitdemo.sample1.fragment.TokenFragment;
+import com.example.retrofitdemo.sample1.fragment.ZipFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,12 +46,12 @@ public class SampleMainActivity extends AppCompatActivity {
 	private void initView(){
 		final Fragment[] fragments = new Fragment[6];
 		fragments[0] = ElementaryFragment.newInstance();
-		fragments[1] = TestPageFragment.newInstance("界面2");
-		fragments[2] = TestPageFragment.newInstance("界面3");
-		fragments[3] = TestPageFragment.newInstance("界面4");
+		fragments[1] = MapFragment.newInstance();
+		fragments[2] = ZipFragment.newInstance();
+		fragments[3] = TokenFragment.newInstance();
 		fragments[4] = TestPageFragment.newInstance("界面5");
 		fragments[5] = TestPageFragment.newInstance("界面6");
-		final String[] titles = {"基本", "标题2", "标题3", "标题4", "标题5", "标题6"};
+		final String[] titles = {"基本", "转换(map)", "压合(zip)", "Token(flatMap)", "标题5", "标题6"};
 		mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
 			@Override
 			public Fragment getItem(int position) {

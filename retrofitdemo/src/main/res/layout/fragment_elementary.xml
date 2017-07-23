@@ -42,10 +42,7 @@
 
 		</RadioGroup>
 
-		<android.support.v7.widget.AppCompatButton
-			android:layout_width="50dp"
-			android:layout_height="wrap_content"
-			android:text="\?"/>
+		<include layout="@layout/layout_help" />
 
 	</LinearLayout>
 

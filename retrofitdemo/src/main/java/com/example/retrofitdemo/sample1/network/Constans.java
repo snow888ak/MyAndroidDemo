@@ -1,4 +1,4 @@
-package com.example.retrofitdemo.network;
+package com.example.retrofitdemo.sample1.network;
 
 /**
  * Created by kezhong.
@@ -9,5 +9,6 @@ package com.example.retrofitdemo.network;
 public class Constans {
 
 	public static String URL_ZHUANG_BI = "http://www.zhuangbi.info/";
+	public static String URL_GANK_API = "http://gank.io/api/";
 
 }

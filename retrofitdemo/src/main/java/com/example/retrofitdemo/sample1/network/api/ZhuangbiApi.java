@@ -1,4 +1,4 @@
-package com.example.retrofitdemo.network.api;
+package com.example.retrofitdemo.sample1.network.api;
 
 import com.example.retrofitdemo.sample1.model.ZhuangbiImage;
 

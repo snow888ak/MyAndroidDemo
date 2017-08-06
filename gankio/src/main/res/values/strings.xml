@@ -1,0 +1,15 @@
+<resources>
+	<string name="app_name">Gank示例</string>
+	
+	<array name="category">
+		<item id="cate_all">all</item>
+		<item id="cate_android">Android</item>
+		<item id="cate_ios">iOS </item>
+		<item id="cate_android">福利</item>
+		<item id="cate_video">休息视频</item>
+		<item id="cate_extends_res">拓展资源</item>
+		<item id="cate_web">前端</item>
+		<item id="cate_suggest">瞎推荐</item>
+		<item id="cate_app">App</item>
+	</array>
+</resources>

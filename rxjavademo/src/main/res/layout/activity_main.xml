@@ -60,6 +60,12 @@
             android:layout_height="wrap_content"
             android:text="监听按钮点击次数"/>
 
+        <Button
+            android:id="@+id/button9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="与Retrofit结合使用示例"/>
+
     </LinearLayout>
 
 

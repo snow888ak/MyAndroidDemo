@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.kezhong.app.gankio.fragment.BaseFragment;
+import com.kezhong.app.gankio.fragment.CategoryFragment;
 import com.kezhong.app.gankio.fragment.TestFragment;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 		List<BaseFragment> result = new ArrayList<>();
 		String[] title = getResources().getStringArray(R.array.category);
 		for (int i = 0, count = title.length; i < count; i++) {
-			result.add(TestFragment.newInstance(title[i]));
+			result.add(CategoryFragment.newInstance(title[i]));
 		}
 		return result;
 	}

@@ -43,4 +43,5 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.7.0'
     compile 'com.android.support:design:26.0.0-alpha1'
     compile project(':lib')
+    compile project(':recyclerviewlib')
 }
